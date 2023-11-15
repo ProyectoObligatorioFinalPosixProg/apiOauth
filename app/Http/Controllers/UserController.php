@@ -38,6 +38,29 @@ class UserController extends Controller
         return $user;
     }
 
+    public function listUser(Request $request){
+        return $user = User::all();
+    }
+
+    public function findUser(Request $request, $idUser){
+        return $user = User::FindOrFail($idUser);
+    }
+
+    public function modifyUser(Request $request, $idUser){
+        $user = User::FindOrFail($idUser);
+        $user -> name = $request -> post("name");
+        $user -> email = $request -> post("email");
+        $user -> password = Hash::make($request -> post("password"));  
+        $user -> save();
+        return $user;
+    }
+
+    public function deleteUser(Request $request, $idUser){
+        $user = User::FindOrFail($idUser);
+        $user -> delete();
+        return [ "message" => "Deleted"];
+    }
+
     public function ValidateToken(Request $request){
         return auth('api')->user();
     }
